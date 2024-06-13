@@ -8,6 +8,10 @@ use App\Http\Requests\IdeaRequest;
 
 class IdeaController extends Controller
 {
+    public function show(Idea $idea)
+    {
+        return view("ideas.show", ['idea' => $idea]);
+    }
     public function store(IdeaRequest $request)
     {
         $idea = Idea::create([
@@ -15,9 +19,20 @@ class IdeaController extends Controller
         ]);
         return redirect()->route("dashboard")->with("success", "Idea Created Successfully!");
     }
-    public function destroy($id)
+    public function destroy(Idea $idea)
     {
-        $idea = Idea::where('id', $id)->firstOrFail()->delete();
+        $idea->delete();
         return redirect()->route('dashboard')->with('success', 'Idea deleted successfully!');
+    }
+    public function edit(Idea $idea)
+    {
+        $editing = true;
+        return view("ideas.show", ['idea' => $idea, 'editing' => $editing]);
+    }
+    public function update(IdeaRequest $request, Idea $idea)
+    {
+        $idea->content = request()->get('content', '');
+        $idea->save();
+        return redirect()->route('ideas.show', $idea->id)->with('success', 'idea updated successfully!');
     }
 }
