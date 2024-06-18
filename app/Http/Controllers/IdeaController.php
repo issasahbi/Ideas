@@ -30,10 +30,13 @@ class IdeaController extends Controller
         $editing = true;
         return view("ideas.show", ['idea' => $idea, 'editing' => $editing]);
     }
-    public function update(IdeaRequest $request, Idea $idea)
+    public function update(Idea $idea)
     {
-        $idea->content = request()->get('content', '');
-        $idea->save();
+        $validated = request()->validate([
+            'content' => 'required|min:3|max:240'
+        ]);
+        $idea->update($validated);
+        // dd($request->content);
         return redirect()->route('ideas.show', $idea->id)->with('success', 'idea updated successfully!');
     }
 }
