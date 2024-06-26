@@ -8,26 +8,25 @@
             {{--           @include('shared.error-message') --}}
             @if (session()->has('success'))
                 @include('shared.success-message')
-                <hr>
             @endif
 
 
             <div class="mt-3">
-                @include('shared.idea-card', [])
+                @include('shared.user-edit-card', [])
             </div>
-
             <hr>
             @forelse ($ideas as $idea)
                 <div class="mt-3">
                     @include('shared.idea-card')
                 </div>
             @empty
-                <p class="text-center my-3">No result found !</p>
+                <p class="text-center my-3">No Idea Shared !</p>
             @endforelse
 
             <div class="mt-3">
                 {{ $ideas->withQueryString()->links() }}
             </div>
+
 
         </div>
 

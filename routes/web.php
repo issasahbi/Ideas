@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,18 +19,14 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+Route::group(["prefix" => "ideas/", "middleware" => ["auth"]], function () {
+    Route::post('', [IdeaController::class, 'store'])->name('ideas.store');
+    Route::Get('/{idea}', [IdeaController::class, 'show'])->name('ideas.show')->withoutMiddleware('auth');
+    Route::Get('/{idea}/edit', [IdeaController::class, 'edit'])->name('ideas.edit');
+    Route::put('/{idea}', [IdeaController::class, 'update'])->name('ideas.update');
+    Route::delete('/{idea}', [IdeaController::class, 'destroy'])->name('ideas.destroy');
+    Route::post('/{idea}/comments', [CommentController::class, 'store'])->name('ideas.comments.store');
+});
+Route::resource('users', UserController::class)->only('show', 'edit', 'update')->middleware('auth');
+Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
 Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
-Route::post('/ideas', [IdeaController::class, 'store'])->name('ideas.store');
-Route::Get('/ideas/{idea}', [IdeaController::class, 'show'])->name('ideas.show');
-Route::Get('/ideas/{idea}/edit', [IdeaController::class, 'edit'])->name('ideas.edit');
-Route::put('/ideas/{idea}', [IdeaController::class, 'update'])->name('ideas.update');
-Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('ideas.destroy');
-Route::get('/profile', [ProfileController::class, 'index']);
-Route::post('/ideas/{idea}/comments', [CommentController::class, 'store'])->name('ideas.comments.store');
-
-Route::get('/register', [AuthController::class, 'register'])->name("register");
-Route::post('/register', [AuthController::class, 'store']);
-
-Route::get('/login', [AuthController::class, 'login'])->name("login");
-Route::post('/login', [AuthController::class, 'authenticate']);
-Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
