@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
         ]);
+        Mail::to($user->email)->send(new WelcomEmail($user));
         return redirect()->route('dashboard')->with('success', 'user created successfully!');
     }
     public function login()
