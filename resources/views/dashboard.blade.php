@@ -10,11 +10,11 @@
                 @include('shared.success-message')
             @endif
 
-            @include('shared.submit-idea')
+            @include('ideas.shared.submit-idea')
             <hr>
             @forelse ($ideas as $idea)
                 <div class="mt-3">
-                    @include('shared.idea-card')
+                    @include('ideas.shared.idea-card')
                 </div>
             @empty
                 <p class="text-center my-3">No result found !</p>
