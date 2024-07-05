@@ -41,7 +41,7 @@ Route::post('ideas/{idea}/like', [IdeaLikeController::class, 'like'])->middlewar
 Route::post('ideas/{idea}/deslike', [IdeaLikeController::class, 'unlike'])->middleware('auth')->name('ideas.unlike');
 Route::get('/feed', FeedController::class)->middleware('auth')->name("feed");
 
-Route::get('/admin', [AdminDashboardController::class, 'index'])->middleware(['admin', 'auth'])->name('admin.dashbord');
+Route::get('/admin', [AdminDashboardController::class, 'index'])->middleware(['auth', 'can:admin'])->name('admin.dashbord'); //use the CAN midellware with the gate admin
 
 
 Route::get('/terms', function () {

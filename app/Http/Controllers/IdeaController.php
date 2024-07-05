@@ -25,25 +25,29 @@ class IdeaController extends Controller
     }
     public function destroy(Idea $idea)
     {
-        if (auth()->id() !== $idea->id) {
-            abort(404, 'you do not have the permission !!');
-        }
+        /* if (auth()->id() !== $idea->user_id) {
+            abort(404);
+        } */
+
+        $this->authorize("delete", $idea); // use the gate permission
         $idea->delete();
         return redirect()->route('dashboard')->with('success', 'Idea deleted successfully!');
     }
     public function edit(Idea $idea)
     {
-        if (auth()->id() !== $idea->id) {
-            abort(404, 'you do not have the permission !!');
-        }
+        /* if (auth()->id() !== $idea->user_id) {
+            abort(404);
+        } */
+        $this->authorize("update", $idea); // use the gate permission
         $editing = true;
-        return view("ideas.show", ['idea' => $idea, 'editing' => $editing]);
+        return view("ideas.show", compact("idea", "editing"));
     }
     public function update(Idea $idea)
     {
-        if (auth()->id() !== $idea->id) {
-            abort(404, 'you do not have the permission !!');
-        }
+        /* if (auth()->id() !== $idea->user_id) {
+            abort(404);
+        } */
+        $this->authorize("update", $idea); // use the gate permission
         $validated = request()->validate([
             'content' => 'required|min:3|max:240'
         ]);
