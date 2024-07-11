@@ -29,7 +29,7 @@ class IdeaController extends Controller
             abort(404);
         } */
 
-        $this->authorize("delete", $idea); // use the gate permission
+        $this->authorize("delete", $idea); // use the Policy
         $idea->delete();
         return redirect()->route('dashboard')->with('success', 'Idea deleted successfully!');
     }
@@ -38,7 +38,7 @@ class IdeaController extends Controller
         /* if (auth()->id() !== $idea->user_id) {
             abort(404);
         } */
-        $this->authorize("update", $idea); // use the gate permission
+        $this->authorize("update", $idea); // use the Policy
         $editing = true;
         return view("ideas.show", compact("idea", "editing"));
     }
@@ -47,7 +47,7 @@ class IdeaController extends Controller
         /* if (auth()->id() !== $idea->user_id) {
             abort(404);
         } */
-        $this->authorize("update", $idea); // use the gate permission
+        $this->authorize("update", $idea); // use the Policy
         $validated = request()->validate([
             'content' => 'required|min:3|max:240'
         ]);

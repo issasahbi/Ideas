@@ -24,6 +24,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+
         $ideas = $user->ideas()->paginate(5);
         return view('users.show', compact('user', 'ideas'));
     }
@@ -33,6 +34,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
         $ideas = $user->ideas()->paginate(5);
         $editing = true;
         return view('users.edit', compact('user', 'editing', 'ideas'));
@@ -43,6 +45,7 @@ class UserController extends Controller
      */
     public function update(User $user)
     {
+        $this->authorize('update', $user);
         $validated = request()->validate([
             'name' => 'required|min:3|max:40',
             'bio' => 'required|min:15|max:250',
