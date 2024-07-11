@@ -3,8 +3,8 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-route::group(
-    ["middleware" => "guest"],
+Route::group(
+    ['middleware' => 'guest'],
     function () {
         Route::get('/register', [AuthController::class, 'register'])->name("register");
         Route::post('/register', [AuthController::class, 'store']);
