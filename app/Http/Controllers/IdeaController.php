@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Idea;
 use Illuminate\Http\Request;
-use App\Http\Requests\IdeaRequest;
+use App\Http\Requests\CreateIdeaRequest;
+use App\Http\Requests\UpdateIdeaRequest;
 
 class IdeaController extends Controller
 {
@@ -13,11 +14,11 @@ class IdeaController extends Controller
 
         return view("ideas.show", ['idea' => $idea]);
     }
-    public function store(IdeaRequest $request)
+    public function store(CreateIdeaRequest $request)
     {
 
         $request->merge(['user_id' => auth()->id()]);
-        $idea = Idea::create([
+        Idea::create([
             'content' => $request->content,
             'user_id' => $request->user_id
         ]);
@@ -42,15 +43,13 @@ class IdeaController extends Controller
         $editing = true;
         return view("ideas.show", compact("idea", "editing"));
     }
-    public function update(Idea $idea)
+    public function update(UpdateIdeaRequest $request, Idea $idea)
     {
         /* if (auth()->id() !== $idea->user_id) {
             abort(404);
         } */
         $this->authorize("update", $idea); // use the Policy
-        $validated = request()->validate([
-            'content' => 'required|min:3|max:240'
-        ]);
+        $validated = $request->validated();
         $idea->update($validated);
         // dd($request->content);
         return redirect()->route('ideas.show', $idea->id)->with('success', 'idea updated successfully!');
